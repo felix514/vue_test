@@ -14,7 +14,7 @@
       <div>
         <ul>
           <li v-for="v in vList">
-            <a :href="v.video.videoUrl">观看视频</a>
+            <a :href="v.video.videoUrl">观看视频。。。</a>
             <img :src="v.video.coverUrl">
             <div v-model="v.video.website">来源：{{v.video.website}}</div>
             <div v-model="v.video.barrageCount">弹幕数：{{v.video.barrageCount}}<div/>
