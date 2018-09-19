@@ -4,7 +4,7 @@
       <div class="head-contain">
 
         <div class="search-block">
-          <el-form>
+          <el-form @submit.native.prevent>
           <div class="input-wrap">
             <input id="search-keyword" v-model="barrage" maxlength="100" autocomplete="off" @keyup.enter="onsubmit">
             
@@ -188,6 +188,7 @@
       },
       onsubmit() {
         if(this.barrage==''){
+          console.log("barrage = null")
           return
         }
         //console.log('submited');
