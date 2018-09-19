@@ -71,7 +71,7 @@
                 </span>
                     <span title="发布时间" class="so-icon date">
                   <i class="icon-date"></i>
-                  {{v.video.releaseTime}}
+                  {{v.video.releaseTime.replace('T',' ').replace('.000+0000','')}}
                 </span>
 
                   </div>
