@@ -6,10 +6,15 @@ import router from './router'
 import VueResource from 'vue-resource'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import VueLazyLoad from 'vue-lazyload'
 
 Vue.use(ElementUI)
 Vue.config.productionTip = false
 Vue.use(VueResource)
+Vue.use(VueLazyLoad,{
+  error:'../logo.png',
+  loading:'../logo.png'
+})
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
