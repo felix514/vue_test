@@ -31,8 +31,6 @@
           </div>
         </li>
       </div>
-
-      </el-form>
       <div class="body-contain">
         <div class="all-contain">
           <div class="result-wrap clearfix">
@@ -92,7 +90,7 @@
 
           </div>
         </div>
-
+      </div>
       </div>
     </div>
 </template>
@@ -209,12 +207,13 @@
           pageIndex: 1,
           order: this.order[index].value,
           duration: this.durationSelect,
-          pageNum: 10
+          pageNum: this.pageNum
         }
         console.log(sendData);
         let url = 'http://139.196.120.123:8080/search';
         this.$http.jsonp(url, {params: sendData}).then(function (response) {
           this.vList = response.data.videoInfos;
+          this.pageIndex=1
         }).catch(function (response) {
           console.log('error');
         });
@@ -233,12 +232,13 @@
           pageIndex: 1,
           order: this.order[this.orderSelect].value,
           duration: index,
-          pageNum: 10
+          pageNum: this.pageNum
         };
         console.log(sendData);
         let url = 'http://139.196.120.123:8080/search';
         this.$http.jsonp(url, {params: sendData}).then(function (response) {
           this.vList = response.data.videoInfos;
+          this.pageIndex=1
         }).catch(function (response) {
           console.log('error');
         });
