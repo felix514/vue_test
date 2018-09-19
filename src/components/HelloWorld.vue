@@ -1,38 +1,43 @@
 <template>
   <div class="search">
     <div class="contain">
-      <el-form>
+      <div class="head-contain">
+
         <div class="search-block">
+          <el-form>
           <div class="input-wrap">
-            <input id="search-keyword" v-model="barrage" maxlength="100" autocomplete="off">
-            </input>
+            <input id="search-keyword" v-model="barrage" maxlength="100" autocomplete="off" @keyup.enter="onsubmit">
+            
             <!--div class="suggest-wrap"></div-->
-            <el-button type="primary" @click="onsubmit" @.keyup.enter.prevent="onsubmit">搜索</el-button>
+            <el-button type="primary" @click="onsubmit">搜索</el-button>
           </div>
+          </el-form>
         </div>
-      </el-form>
-
-      <div class="order-area" v-show="barrage!=''">
-        <li v-for="(o,index) in order">
-          <div @mouseover="orderEnter(index)" @mouseout="orderLeave()">
-            <el-button v-on:click="orderClick(index)"
-                       :class="index==orderSelect||index==mouseOrder?'button-on':'button-off'">{{o.content}}
-            </el-button>
-          </div>
-        </li>
       </div>
 
-      <div class="duration-area" v-show="barrage!=''">
-        <li v-for="(d,index) in durations">
-          <div @mouseover="durationEnter(index)" @mouseout="durationLeave()">
-            <el-button v-on:click="durationClick(index)"
-                       :class="index==durationSelect||index==mouseDuration?'button-on':'button-off'">{{d.duration}}
-            </el-button>
-          </div>
-        </li>
-      </div>
       <div class="body-contain">
         <div class="all-contain">
+          <div class="filter-wrap" v-show="vTotal>0||flag>0">
+            <div class="order-area">
+              <li v-for="(o,index) in order">
+                <div @mouseover="orderEnter(index)" @mouseout="orderLeave()">
+                  <el-button v-on:click="orderClick(index)"
+                             :class="index==orderSelect||index==mouseOrder?'button-on':'button-off'">{{o.content}}
+                  </el-button>
+                </div>
+              </li>
+            </div>
+
+            <div class="duration-area" v-show="vTotal>0||flag>0">
+              <li v-for="(d,index) in durations">
+                <div @mouseover="durationEnter(index)" @mouseout="durationLeave()">
+                  <el-button v-on:click="durationClick(index)"
+                             :class="index==durationSelect||index==mouseDuration?'button-on':'button-off'">{{d.duration}}
+                  </el-button>
+                </div>
+              </li>
+            </div>
+          </div>
           <div class="result-wrap clearfix">
             <ul class="video-contain clearfix">
               <li v-for="v in vList" class="video list">
@@ -48,7 +53,7 @@
                 </a>
                 <div class="info">
                   <div class="headline clearfix">
-                    <a title="观看视频" class="title" href="v.video.videoUrl" target="_blank">前往观看视频</a>
+                    <a title="观看视频" class="title" :href="v.video.videoUrl" target="_blank">前往观看视频</a>
                   </div>
                   <div class="tags">
 
@@ -100,10 +105,11 @@
     data() {
       return {
         pageNum: 15,
-        barrage: '23',
+        barrage: '',
         pageIndex: 1,
         vList: [],
         vTotal: 0,
+        flag:0,
 
         durations: [
           {id: '0', duration: '全部时长'},
@@ -135,8 +141,8 @@
         var N = this.pageNum;
         var B = this.barrage;
         var P = this.pageIndex;
-        var O = 'pubdata';
-        var D = 0;
+        var O = this.order[orderSelect].value;
+        var D = this.duration[durationSelect].id;
         var sendData = {
           pageNum: N,
           barrage: B,
@@ -158,8 +164,8 @@
         var N = this.pageNum;
         var B = this.barrage;
         var P = this.pageIndex;
-        var O = 'pubdata';
-        var D = 0;
+        var O = this.order[orderSelect].value;
+        var D = this.duration[durationSelect].id;
         var sendData = {
           pageNum: N,
           barrage: B,
@@ -177,11 +183,14 @@
         });
       },
       onsubmit() {
+        if(this.barrage==''){
+          return
+        }
         //console.log('submited');
         var N = this.pageNum;
         var B = this.barrage;
         var P = this.pageIndex;
-        var O = 'pubdata';
+        var O = 'totalorder';
         var D = 0;
         var sendData = {
           pageNum: N,
@@ -193,6 +202,9 @@
         //console.log(sendData);
         let url = 'http://139.196.120.123:8080/search';
         this.$http.jsonp(url, {params: sendData}).then(function (response) {
+          if(this.flag==0){
+            this.flag=1;
+          }
           this.vTotal = response.data.total;
           this.vList = response.data.videoInfos;
         }).catch(function (response) {
@@ -213,6 +225,7 @@
         let url = 'http://139.196.120.123:8080/search';
         this.$http.jsonp(url, {params: sendData}).then(function (response) {
           this.vList = response.data.videoInfos;
+          this.vTotal=response.data.total;
           this.pageIndex=1
         }).catch(function (response) {
           console.log('error');
@@ -238,6 +251,7 @@
         let url = 'http://139.196.120.123:8080/search';
         this.$http.jsonp(url, {params: sendData}).then(function (response) {
           this.vList = response.data.videoInfos;
+          this.vTotal=response.data.total;
           this.pageIndex=1
         }).catch(function (response) {
           console.log('error');
@@ -256,6 +270,19 @@
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+  .filter-wrap {
+    height: auto;
+    padding: 20px 0 10px;
+    position: relative;
+    border-bottom: 1px solid #e5e9ef;
+    display: table;
+    width: 100%;
+  }
+
+  .head-contain {
+    padding-top: 40px;
+  }
+
   .video.list {
     height: 100px;
     width: 808px;
@@ -409,6 +436,7 @@
     width: 430px;
     float: left;
     margin-left: 26px;
+    position: relative;
   }
 
   .suggest-wrap {
