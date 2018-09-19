@@ -38,6 +38,9 @@
               </li>
             </div>
           </div>
+
+          <v-goTop></v-goTop>
+
           <div class="result-wrap clearfix">
             <ul class="video-contain clearfix">
               <li v-for="v in vList" class="video list">
@@ -100,6 +103,7 @@
     </div>
 </template>
 <script>
+  import goTop from "./public/goTop";
   export default {
     name: 'HelloWorld',
     data() {
@@ -264,7 +268,10 @@
         this.mouseDuration = -1
       },
     },
-    watch: {}
+    watch: {},
+    components:{
+      'v-goTop':goTop
+    }
 
   }
 </script>
