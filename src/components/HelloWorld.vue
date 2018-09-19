@@ -8,7 +8,7 @@
 
         </input>
         <!--div class="suggest-wrap"></div-->
-        <el-button type="primary" @click="onsubmit">搜索</el-button>
+        <el-button type="primary" @click="onsubmit" @.keyup.enter.prevent="onsubmit">搜索</el-button>
       </div>
       </div>
       </el-form>
@@ -17,7 +17,7 @@
         <div class="result-wrap clearfix">
         <ul class="video-contain clearfix">
           <li v-for="v in vList" class="video list">
-            <a title="观看视频" :href=" v.video.videoUrl" target="_blank">观看视频
+            <a title="观看视频" :href=" v.video.videoUrl" target="_blank">
               <div class="img">
                 <div class="lazy-img">
                   <img :src="v.video.coverUrl"/>
@@ -29,7 +29,7 @@
             </a>
             <div class="info">
               <div class="headline clearfix">
-                <a title="观看视频" class="title" href="v.video.videoUrl" target="_blank"></a>
+                <a title="观看视频" class="title" href="v.video.videoUrl" target="_blank">前往观看视频</a>
               </div>
               <div class="tags">
                 <span title="热度" class="so-icon heat">
@@ -52,8 +52,23 @@
             </div>
           </li>
         </ul>
+          <div class="block">
+
+            <el-pagination
+              v-show="vTotal>0"
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page="pageIndex"
+              :page-sizes="[10, 15, 20, 25]"
+              :page-size="pageNum"
+              layout="total, sizes, prev, pager, next, jumper"
+              :total="vTotal">
+            </el-pagination>
+          </div>
+
         </div>
       </div>
+
     </div>
     </div>
   </div>
@@ -63,29 +78,79 @@ export default {
   name: 'HelloWorld',
   data () {
     return {
-
+           pageNum:15,
            barrage: '23',
-
+           pageIndex:1,
            vList:[],
+           vTotal:0,
 
     }
   },
   methods:{
+    handleCurrentChange(pageIndex){
+      this.pageIndex=pageIndex;
+      var N=this.pageNum;
+      var B=this.barrage;
+      var P=this.pageIndex;
+      var O='pubdata';
+      var D=0;
+      var sendData={
+        pageNum:N,
+        barrage:B,
+        pageIndex:P,
+        order:O,
+        duration:D
+      };
+      //console.log(sendData);
+      let url='http://139.196.120.123:8080/search';
+      this.$http.jsonp(url,{params : sendData}).then(function(response){
+        this.vTotal=response.data.total;
+        this.vList=response.data.videoInfos;
+      }).catch(function(response){
+        console.log('error');
+      });
+    },
+    handleSizeChange(pageNum){
+      this.pageNum=pageNum;
+      var N=this.pageNum;
+      var B=this.barrage;
+      var P=this.pageIndex;
+      var O='pubdata';
+      var D=0;
+      var sendData={
+        pageNum:N,
+        barrage:B,
+        pageIndex:P,
+        order:O,
+        duration:D
+      };
+      //console.log(sendData);
+      let url='http://139.196.120.123:8080/search';
+      this.$http.jsonp(url,{params : sendData}).then(function(response){
+        this.vTotal=response.data.total;
+        this.vList=response.data.videoInfos;
+      }).catch(function(response){
+        console.log('error');
+      });
+    },
     onsubmit(){
         //console.log('submited');
+            var N=this.pageNum;
            var B=this.barrage;
-            var P=1;
+            var P=this.pageIndex;
             var O='pubdata';
-            var D=2;
+            var D=0;
             var sendData={
+              pageNum:N,
               barrage:B,
               pageIndex:P,
               order:O,
               duration:D
               };
-             console.log(sendData);
+             //console.log(sendData);
              let url='http://139.196.120.123:8080/search';
           this.$http.jsonp(url,{params : sendData}).then(function(response){
+                              this.vTotal=response.data.total;
                              this.vList=response.data.videoInfos;
                        }).catch(function(response){
                            console.log('error');
@@ -170,6 +235,13 @@ a {
 .hide {
   display: none;
 }
+.video .so-icon.videoid {
+  white-space: nowrap;
+}
+.so-icon i.icon-videoid {
+  background-position: -485px -543px;
+}
+
 .so-icon i.icon-date {
   background-position: -442px -165px;
 }
@@ -200,6 +272,18 @@ i {
 .video.list .title:hover {
   color: #00a1d6;
 }
+.video.list .title {
+  margin-right: 6px;
+  font-size: 16px;
+  color: #222;
+  max-width: 592px;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  float: left;
+}
+
 .search-wrap {
   height: 44px;
   margin: 0 auto;
