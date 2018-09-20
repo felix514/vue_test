@@ -53,7 +53,7 @@
                 <a title="观看视频" :href=" v.video.videoUrl" target="_blank">
                   <div class="img">
                     <div class="lazy-img">
-                      <img :src="v.video.coverUrl"/>
+                      <img :src="[bUrl+v.video.videoId+final]"/>
                     </div>
                     <span class="so-imgTag_rb">{{v.video.timeLength}}</span>
                     <div class="watch-later-trigger watch-later"></div>
@@ -116,6 +116,8 @@
     name: 'HelloWorld',
     data() {
       return {
+        final:'.jpg',
+        bUrl:'http://139.196.120.123/images/',
         pageNum: 15,
         duration:0,
         barrage: '',
@@ -125,6 +127,7 @@
         flag:0,
         rList:[],
         rList:[],
+        cover_url:'',
         durations: [
           {id: '0', duration: '全部时长'},
           {id: '1', duration: '10分钟以下'},
@@ -250,6 +253,7 @@
           //console.log(response.data.videoInfos.barrages.content);
           this.vTotal = response.data.total;
           this.vList = response.data.videoInfos;
+          //this.cover_url = 'http://139.196.120.123/images/'+this.vList.video.videoId+'.jpg';
           //this.bList = response.data.videoInfos.barrages;
         }).catch(function (response) {
           console.log('submitError');
@@ -379,6 +383,11 @@
     height: 100%;
     display: inline-block;
   }
+  fieldset, img {
+    border: none;
+    vertical-align: middle;
+  }
+
 
   .video .so-imgTag_rb {
     position: absolute;
