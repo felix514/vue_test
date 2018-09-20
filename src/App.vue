@@ -2,13 +2,21 @@
   <div id="app">
     <!--img src="./assets/logo.png"-->
     <router-view/>
+    <loading v-if="LOADING"/>
   </div>
 </template>
 
 <script>
-export default {
-  name: 'App'
-}
+import {mapState} from 'vuex'
+  export default {
+  computed:{
+    ...mapState([
+      'LOADING'
+    ])
+  },
+    name: 'App'
+    }
+
 </script>
 
 <style>

@@ -7,6 +7,7 @@ import VueResource from 'vue-resource'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import VueLazyLoad from 'vue-lazyload'
+import store from './store'
 
 Vue.use(ElementUI)
 Vue.config.productionTip = false
@@ -19,6 +20,7 @@ Vue.use(VueLazyLoad,{
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })

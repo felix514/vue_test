@@ -1,14 +1,17 @@
 <template>
+  <div class="all-show">
   <div class="search">
     <div class="contain">
       <div class="head-contain">
-
+        <v-goTop></v-goTop>
+        <div class="search-wrap">
+          <div class="logo-input clearfix">
+            <img class="logo-size" src="./public/logo3.jpg">
         <div class="search-block">
-          <v-goTop></v-goTop>
           <el-form @submit.native.prevent>
           <div class="input-wrap">
             <input id="search-keyword" v-model="barrage" maxlength="100" autocomplete="off" @keyup.enter="onsubmit" @keyup="barrageAdd">
-            <div class="suggest-wrap" v-show="barrage">
+            <!--div class="suggest-wrap" v-show="barrage">
               <ul class="keyword-wrap">
                 <li v-for="r in rList">
                   <button class="" @click="writeOn">
@@ -16,10 +19,12 @@
                   </button>
                 </li>
               </ul>
-            </div>
+            </div-->
             <el-button type="primary" @click="onsubmit">搜索</el-button>
           </div>
           </el-form>
+        </div>
+          </div>
         </div>
       </div>
 
@@ -62,10 +67,10 @@
                 </a>
                 <div class="info">
                   <div class="headline clearfix">
-                    <a title="观看视频" class="title" :href="v.video.videoUrl" target="_blank">{{v.video.title}}</a>
+                    <a ：title="v.video.title" class="title" :href="v.video.videoUrl" target="_blank">{{v.video.title}}</a>
                   </div>
                   <div class="des hide">
-                    该视频其它热门弹幕：{{v.barrages[0].content}}、{{v.barrages[1].content}}、{{v.barrages[2].content}}
+                    该视频其它热门弹幕：{{v.barrages[0].content}}、{{v.barrages[1].content}}、{{v.barrages[2].content}}、{{v.barrages[3].content}}、{{v.barrages[4].content}}、{{v.barrages[5].content}}、{{v.barrages[6].content}}、{{v.barrages[7].content}}、{{v.barrages[8].content}}、{{v.barrages[9].content}}
                   </div>
                   <div class="tags">
                 <span title="热度" class="so-icon heat">
@@ -109,6 +114,7 @@
       </div>
       </div>
     </div>
+  </div>
 </template>
 <script>
   import goTop from "./public/goTop";
@@ -230,6 +236,7 @@
           console.log("barrage = null");
           return;
         }
+        this.$store.commit('showLoading');
         //console.log('submited');
         var N = this.pageNum;
         var B = this.barrage;
@@ -251,8 +258,10 @@
           }
           //console.log('你提交了。。');
           //console.log(response.data.videoInfos.barrages.content);
+          this.$store.commit('hideLoading');
           this.vTotal = response.data.total;
           this.vList = response.data.videoInfos;
+
           //this.cover_url = 'http://139.196.120.123/images/'+this.vList.video.videoId+'.jpg';
           //this.bList = response.data.videoInfos.barrages;
         }).catch(function (response) {
@@ -321,6 +330,15 @@
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+  .all-show{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: auto;
+    background: url("./public/background3.jpg");
+    background-attachment: fixed;
+  }
   .filter-wrap {
     height: auto;
     padding: 20px 0 10px;
@@ -340,6 +358,7 @@
     padding: 20px 0 20px 172px;
     position: relative;
     border-bottom: 1px solid #e5e9ef;
+    background-color:rgba(255,255,255,0);
   }
 
   li, ol, ul {
@@ -512,6 +531,7 @@
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.16);
   }
 
+
   .search .search-block .input-wrap input {
     height: 18px;
     -webkit-box-shadow: none;
@@ -603,16 +623,24 @@
   }
   .video.list .des {
     position:absolute;
-    margin-top: 35px;
+    margin-top: 30px;
     max-height: 36px;
     overflow: hidden;
-    color: #99a2aa;
+    color: slategrey;
     line-height: 18px;
     display: block;
-    background-color: #fff;
+    background-color:rgba(255,255,255,0);
     font: 12px Helvetica Neue,Helvetica,Arial,Microsoft Yahei,Hiragino Sans GB,Heiti SC,WenQuanYi Micro Hei,sans-serif;
     padding-bottom: 10px;
     text-align:left;
+  }
+  .search-wrap .logo-size {
+    background-image: url("//s1.hdslb.com/bfs/static/jinkela/search/images/sprite-690be8a6ea.png");
+    background-position: -261px -72px;
+    width: 131px;
+    height: 35px;
+    float: left;
+    margin-top: 7px;
   }
 
 
