@@ -4,11 +4,19 @@
       <div class="head-contain">
 
         <div class="search-block">
+          <v-goTop></v-goTop>
           <el-form @submit.native.prevent>
           <div class="input-wrap">
-            <input id="search-keyword" v-model="barrage" maxlength="100" autocomplete="off" @keyup.enter="onsubmit">
-            
-            <!--div class="suggest-wrap"></div-->
+            <input id="search-keyword" v-model="barrage" maxlength="100" autocomplete="off" @keyup.enter="onsubmit" @keyup="barrageAdd">
+            <div class="suggest-wrap" v-show="barrage">
+              <ul class="keyword-wrap">
+                <li v-for="r in rList">
+                  <button class="" @click="writeOn">
+                    {{r}}
+                  </button>
+                </li>
+              </ul>
+            </div>
             <el-button type="primary" @click="onsubmit">搜索</el-button>
           </div>
           </el-form>
@@ -39,8 +47,6 @@
             </div>
           </div>
 
-          <v-goTop></v-goTop>
-
           <div class="result-wrap clearfix">
             <ul class="video-contain clearfix">
               <li v-for="v in vList" class="video list">
@@ -56,17 +62,19 @@
                 </a>
                 <div class="info">
                   <div class="headline clearfix">
-                    <a title="观看视频" class="title" :href="v.video.videoUrl" target="_blank">前往观看视频</a>
+                    <a title="观看视频" class="title" :href="v.video.videoUrl" target="_blank">{{v.video.title}}</a>
+                  </div>
+                  <div class="des hide">
+                    该视频其它热门弹幕：{{v.barrages[0].content}}、{{v.barrages[1].content}}、{{v.barrages[2].content}}
                   </div>
                   <div class="tags">
-
                 <span title="热度" class="so-icon heat">
                   <i class="heatnum"></i>
                   {{v.video.heat}}
                 </span>
-                    <span title="视频ID" class="so-icon videoid">
+                    <span title="视频播放量" class="so-icon videoid">
                   <i class="icon-videoid"></i>
-                  {{v.video.videoId}}
+                  {{v.video.views}}
                 </span>
                     <span title="弹幕数" class="so-icon subtitle">
                   <i class="icon-subtitle"></i>
@@ -109,12 +117,14 @@
     data() {
       return {
         pageNum: 15,
+        duration:0,
         barrage: '',
         pageIndex: 1,
         vList: [],
         vTotal: 0,
         flag:0,
-
+        rList:[],
+        rList:[],
         durations: [
           {id: '0', duration: '全部时长'},
           {id: '1', duration: '10分钟以下'},
@@ -140,13 +150,34 @@
       }
     },
     methods: {
+      writeOn(){
+        this.barrage=this.r;
+      },
+      barrageAdd(){
+        var partB = this.barrage;
+        var sendData = {
+          partBarrage:partB
+        };
+        //console.log(sendData);
+        let url = 'http://192.168.81.1:8080/associativeSearch';
+        this.$http.jsonp(url, {params: sendData}).then(function (response) {
+          //this.vTotal = response.data.total;
+          console.log(response.data.results);
+          this.rList=response.data.results;
+        }).catch(function (response) {
+          console.log('error');
+        });
+      },
       handleCurrentChange(pageIndex) {
         this.pageIndex = pageIndex;
+        console.log(this.orderSelect+"-------")
         var N = this.pageNum;
         var B = this.barrage;
         var P = this.pageIndex;
-        var O = this.order[orderSelect].value;
-        var D = this.duration[durationSelect].id;
+        var orderIndex=this.orderSelect
+        var durationIndex=this.durationSelect
+        var O = this.order[orderIndex].value;
+        var D = this.durations[durationIndex].id;
         var sendData = {
           pageNum: N,
           barrage: B,
@@ -159,17 +190,21 @@
         this.$http.jsonp(url, {params: sendData}).then(function (response) {
           this.vTotal = response.data.total;
           this.vList = response.data.videoInfos;
+          console.log('当前页面改变了。。');
         }).catch(function (response) {
-          console.log('error');
+          console.log('handleCurrentChangeError');
         });
       },
       handleSizeChange(pageNum) {
         this.pageNum = pageNum;
+        console.log('页面视频数改变了。。');
         var N = this.pageNum;
         var B = this.barrage;
         var P = this.pageIndex;
-        var O = this.order[orderSelect].value;
-        var D = this.duration[durationSelect].id;
+        var orderIndex=this.orderSelect
+        var durationIndex=this.durationSelect
+        var O = this.order[orderIndex].value;
+        var D = this.durations[durationIndex].id;
         var sendData = {
           pageNum: N,
           barrage: B,
@@ -182,21 +217,22 @@
         this.$http.jsonp(url, {params: sendData}).then(function (response) {
           this.vTotal = response.data.total;
           this.vList = response.data.videoInfos;
+          this.pageIndex = 1;
         }).catch(function (response) {
-          console.log('error');
+          console.log('handleSizeChangeError');
         });
       },
       onsubmit() {
         if(this.barrage==''){
-          console.log("barrage = null")
-          return
+          console.log("barrage = null");
+          return;
         }
         //console.log('submited');
         var N = this.pageNum;
         var B = this.barrage;
         var P = this.pageIndex;
         var O = 'totalorder';
-        var D = 0;
+        var D = this.duration;
         var sendData = {
           pageNum: N,
           barrage: B,
@@ -210,10 +246,13 @@
           if(this.flag==0){
             this.flag=1;
           }
+          //console.log('你提交了。。');
+          //console.log(response.data.videoInfos.barrages.content);
           this.vTotal = response.data.total;
           this.vList = response.data.videoInfos;
+          //this.bList = response.data.videoInfos.barrages;
         }).catch(function (response) {
-          console.log('error');
+          console.log('submitError');
         });
       },
       orderClick(index) {
@@ -231,7 +270,7 @@
         this.$http.jsonp(url, {params: sendData}).then(function (response) {
           this.vList = response.data.videoInfos;
           this.vTotal=response.data.total;
-          this.pageIndex=1
+          this.pageIndex=1;
         }).catch(function (response) {
           console.log('error');
         });
@@ -552,4 +591,20 @@
     color: #000;
     border: none;
   }
+  .video.list .des {
+    position:absolute;
+    margin-top: 35px;
+    max-height: 36px;
+    overflow: hidden;
+    color: #99a2aa;
+    line-height: 18px;
+    display: block;
+    background-color: #fff;
+    font: 12px Helvetica Neue,Helvetica,Arial,Microsoft Yahei,Hiragino Sans GB,Heiti SC,WenQuanYi Micro Hei,sans-serif;
+    padding-bottom: 10px;
+    text-align:left;
+  }
+
+
+
 </style>
