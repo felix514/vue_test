@@ -53,7 +53,7 @@
                 <a title="观看视频" :href=" v.video.videoUrl" target="_blank">
                   <div class="img">
                     <div class="lazy-img">
-                      <img :src="[bUrl+v.video.videoId+final]"/>
+                      <img :src="[bUrl+v.video.videoId+final]" height="100px" width="160px"/>
                     </div>
                     <span class="so-imgTag_rb">{{v.video.timeLength}}</span>
                     <div class="watch-later-trigger watch-later"></div>
@@ -375,6 +375,7 @@
     width: 160px;
     border-radius: 4px;
     overflow: hidden;
+    background-size: auto;
   }
 
   .lazy-img {
