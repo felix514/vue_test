@@ -27,7 +27,7 @@
           </div>
         </div>
       </div>
-<div class="hotsearchs"><a href="http://www.pansoso.com/zh/%E7%AD%89%E5%88%B0%E7%83%9F%E6%9A%96%E9%9B%A8%E6%94%B6">精彩</a><a href="http://www.pansoso.com/zh/%E5%A4%9C%E5%A4%A9%E5%AD%90">辛苦了</a><a href="http://www.pansoso.com/zh/%E6%96%97%E7%A0%B4%E8%8B%8D%E7%A9%B9">真实</a><a href="http://www.pansoso.com/zh/%E5%A6%82%E6%87%BF%E4%BC%A0">上香</a><a href="http://www.pansoso.com/zh/%E5%A8%98%E9%81%93">欢迎回家</a><a href="http://www.pansoso.com/zh/%E7%99%BD%E9%B9%BF%E5%8E%9F">此生无悔入二次元!</a><a href="http://www.pansoso.com/zh/%E9%93%B6%E9%AD%82">嘟督辛苦了</a></div>
+<div class="hotsearchs"><a  @click="writeOn">{{mag}}</a><a href="http://www.pansoso.com/zh/%E5%A4%9C%E5%A4%A9%E5%AD%90">辛苦了</a><a href="http://www.pansoso.com/zh/%E6%96%97%E7%A0%B4%E8%8B%8D%E7%A9%B9">真实</a><a href="http://www.pansoso.com/zh/%E5%A6%82%E6%87%BF%E4%BC%A0">上香</a><a href="http://www.pansoso.com/zh/%E5%A8%98%E9%81%93">欢迎回家</a><a href="http://www.pansoso.com/zh/%E7%99%BD%E9%B9%BF%E5%8E%9F">此生无悔入二次元!</a><a href="http://www.pansoso.com/zh/%E9%93%B6%E9%AD%82">嘟督辛苦了</a></div>
 
 
       <div class="body-contain">
@@ -124,6 +124,7 @@
     name: 'HelloWorld',
     data() {
       return {
+        mag:'精彩',
         final:'.jpg',
         bUrl:'http://139.196.120.123/images/',
         pageNum: 15,
@@ -163,7 +164,44 @@
     
     methods: {
       writeOn(){
-        this.barrage=this.r;
+        this.barrage=this.mag;
+        this.pageIndex=1;
+        if(this.barrage==''){
+          console.log("barrage = null");
+          return;
+        }
+        this.vList=[];
+        this.$store.commit('showLoading');
+        //console.log('submited');
+        var N = this.pageNum;
+        var B = this.barrage;
+        var P = this.pageIndex;
+        var O = 'heat';
+        var D = this.duration;
+        var sendData = {
+          pageNum: N,
+          barrage: B,
+          pageIndex: P,
+          order: O,
+          duration: D
+        };
+        //console.log(sendData);
+        let url = 'http://139.196.120.123:8080/search';
+        this.$http.jsonp(url, {params: sendData}).then(function (response) {
+          if(this.flag==0){
+            this.flag=1;
+          }
+          //console.log('你提交了。。');
+          //console.log(response.data.videoInfos.barrages.content);
+          this.$store.commit('hideLoading');
+          this.vTotal = response.data.total;
+          this.vList = response.data.videoInfos;
+
+          //this.cover_url = 'http://139.196.120.123/images/'+this.vList.video.videoId+'.jpg';
+          //this.bList = response.data.videoInfos.barrages;
+        }).catch(function (response) {
+          console.log('submitError');
+        });
       },
       barrageAdd(){
         var partB = this.barrage;
