@@ -141,10 +141,10 @@
           {id: '4', duration: '60分钟以上'}
         ],
         order: [
-          {id: '0', value: 'totalrank', content: '综合排序'},
-          {id: '1', value: 'heat', content: '热度最高'},
-          {id: '2', value: 'pubdate', content: '最新发布'},
-          {id: '3', value: 'dm', content: '最多弹幕'}
+          // {id: '0', value: 'totalrank', content: '综合排序'},
+          {id: '0', value: 'heat', content: '热度最高'},
+          {id: '1', value: 'pubdate', content: '最新发布'},
+          {id: '2', value: 'dm', content: '最多弹幕'}
         ],
         //当前排序的选择
         orderSelect: 0,
@@ -242,7 +242,7 @@
         var N = this.pageNum;
         var B = this.barrage;
         var P = this.pageIndex;
-        var O = 'totalorder';
+        var O = 'heat';
         var D = this.duration;
         var sendData = {
           pageNum: N,
