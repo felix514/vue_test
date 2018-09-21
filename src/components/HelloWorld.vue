@@ -67,7 +67,7 @@
                 </a>
                 <div class="info">
                   <div class="headline clearfix">
-                    <a :title="v.video.title" class="title" :href="v.video.videoUrl" target="_blank">{{v.video.title}}</a>
+                    <a :title="v.video.title" class="title" :href="v.video.videoUrl" target="_blank">{{v.video.title}}</a><div class="el-cascader-menu__item__keyword">【搜索词：{{v.bcontent.substr(0,10)}}】【次数：{{v.btimes}}】</div>
                   </div>
                   <div class="des hide">
                     该视频其它热门弹幕：{{v.barrages[0].content}}、{{v.barrages[1].content}}、{{v.barrages[2].content}}、{{v.barrages[3].content}}、{{v.barrages[4].content}}、{{v.barrages[5].content}}、{{v.barrages[6].content}}、{{v.barrages[7].content}}、{{v.barrages[8].content}}、{{v.barrages[9].content}}
@@ -233,10 +233,12 @@
         });
       },
       onsubmit() {
+        this.pageIndex=1;
         if(this.barrage==''){
           console.log("barrage = null");
           return;
         }
+        this.vList=[];
         this.$store.commit('showLoading');
         //console.log('submited');
         var N = this.pageNum;
@@ -499,6 +501,7 @@
     overflow: hidden;
     white-space: nowrap;
     float: left;
+    white-space: nowrap;
   }
 
   .search-wrap {
@@ -623,11 +626,11 @@
   }
   .video.list .des {
     position:absolute;
-    margin-top: 30px;
+    margin-top: 3px;
     max-height: 36px;
     overflow: hidden;
     color: slategrey;
-    line-height: 18px;
+    line-height: 10px;
     display: block;
     background-color:rgba(255,255,255,0);
     font: 12px Helvetica Neue,Helvetica,Arial,Microsoft Yahei,Hiragino Sans GB,Heiti SC,WenQuanYi Micro Hei,sans-serif;
@@ -642,7 +645,4 @@
     float: left;
     margin-top: 7px;
   }
-
-
-
 </style>
