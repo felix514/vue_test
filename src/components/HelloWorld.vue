@@ -27,6 +27,8 @@
           </div>
         </div>
       </div>
+<div class="hotsearchs"><a href="http://www.pansoso.com/zh/%E7%AD%89%E5%88%B0%E7%83%9F%E6%9A%96%E9%9B%A8%E6%94%B6">精彩</a><a href="http://www.pansoso.com/zh/%E5%A4%9C%E5%A4%A9%E5%AD%90">辛苦了</a><a href="http://www.pansoso.com/zh/%E6%96%97%E7%A0%B4%E8%8B%8D%E7%A9%B9">真实</a><a href="http://www.pansoso.com/zh/%E5%A6%82%E6%87%BF%E4%BC%A0">上香</a><a href="http://www.pansoso.com/zh/%E5%A8%98%E9%81%93">欢迎回家</a><a href="http://www.pansoso.com/zh/%E7%99%BD%E9%B9%BF%E5%8E%9F">此生无悔入二次元!</a><a href="http://www.pansoso.com/zh/%E9%93%B6%E9%AD%82">嘟督辛苦了</a></div>
+
 
       <div class="body-contain">
         <div class="all-contain">
@@ -131,6 +133,7 @@
         vList: [],
         vTotal: 0,
         flag:0,
+        pList:[],
         rList:[],
         cover_url:'',
         durations: [
@@ -157,6 +160,7 @@
 
       }
     },
+    
     methods: {
       writeOn(){
         this.barrage=this.r;
@@ -645,4 +649,27 @@
     float: left;
     margin-top: 7px;
   }
+  .hotsearchs {
+    text-align: center;
+    margin-top: 13px;
+}
+
+.hotsearchs a {
+    padding: 6px 10px;
+    margin: 2px;
+    border: 1px solid #d8d8d8;
+    color: #878787;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    display: inline-block;
+    font-size: 13px;
+}
+
+.hotsearchs a:hover {
+    text-decoration: none;
+    border: 1px solid #00a0f0;
+    color: #00a0f0;
+}
+
 </style>
