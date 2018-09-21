@@ -6,7 +6,7 @@
         <v-goTop></v-goTop>
         <div class="search-wrap">
           <div class="logo-input clearfix">
-            <img class="logo-size" src="./public/logo3.jpg">
+            <img class="logo-size" src="./public/logo4.png">
         <div class="search-block">
           <el-form @submit.native.prevent>
           <div class="input-wrap">
