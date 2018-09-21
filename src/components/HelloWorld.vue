@@ -10,7 +10,7 @@
         <div class="search-block">
           <el-form @submit.native.prevent>
           <div class="input-wrap">
-            <input id="search-keyword" v-model="barrage" maxlength="100" autocomplete="off" @keyup.enter="onsubmit" @keyup="barrageAdd">
+            <input id="search-keyword" v-model="barrage" maxlength="100" autocomplete="off" @keyup.enter="onsubmit">
             <!--div class="suggest-wrap" v-show="barrage">
               <ul class="keyword-wrap">
                 <li v-for="r in rList">
@@ -67,7 +67,7 @@
                 </a>
                 <div class="info">
                   <div class="headline clearfix">
-                    <a ：title="v.video.title" class="title" :href="v.video.videoUrl" target="_blank">{{v.video.title}}</a>
+                    <a :title="v.video.title" class="title" :href="v.video.videoUrl" target="_blank">{{v.video.title}}</a>
                   </div>
                   <div class="des hide">
                     该视频其它热门弹幕：{{v.barrages[0].content}}、{{v.barrages[1].content}}、{{v.barrages[2].content}}、{{v.barrages[3].content}}、{{v.barrages[4].content}}、{{v.barrages[5].content}}、{{v.barrages[6].content}}、{{v.barrages[7].content}}、{{v.barrages[8].content}}、{{v.barrages[9].content}}
@@ -132,7 +132,6 @@
         vTotal: 0,
         flag:0,
         rList:[],
-        rList:[],
         cover_url:'',
         durations: [
           {id: '0', duration: '全部时长'},
@@ -168,7 +167,7 @@
           partBarrage:partB
         };
         //console.log(sendData);
-        let url = 'http://192.168.81.1:8080/associativeSearch';
+        let url = 'http://139.196.120.123:8080/associativeSearch';
         this.$http.jsonp(url, {params: sendData}).then(function (response) {
           //this.vTotal = response.data.total;
           console.log(response.data.results);
@@ -179,6 +178,7 @@
       },
       handleCurrentChange(pageIndex) {
         this.pageIndex = pageIndex;
+        this.vList=[]
         console.log(this.orderSelect+"-------")
         var N = this.pageNum;
         var B = this.barrage;
@@ -206,6 +206,7 @@
       },
       handleSizeChange(pageNum) {
         this.pageNum = pageNum;
+        this.vList=[]
         console.log('页面视频数改变了。。');
         var N = this.pageNum;
         var B = this.barrage;
@@ -269,7 +270,7 @@
         });
       },
       orderClick(index) {
-        console.log(index)
+        this.vList=[]
         this.orderSelect = index
         let sendData = {
           barrage: this.barrage,
@@ -295,7 +296,7 @@
         this.mouseOrder = -1
       },
       durationClick(index) {
-        console.log(index)
+        this.vList=[]
         this.durationSelect = index
         let sendData = {
           barrage: this.barrage,
@@ -357,7 +358,6 @@
     width: 808px;
     padding: 20px 0 20px 172px;
     position: relative;
-    border-bottom: 1px solid #e5e9ef;
     background-color:rgba(255,255,255,0);
   }
 
@@ -637,7 +637,7 @@
   .search-wrap .logo-size {
     background-image: url("//s1.hdslb.com/bfs/static/jinkela/search/images/sprite-690be8a6ea.png");
     background-position: -261px -72px;
-    width: 131px;
+    width: 100px;
     height: 35px;
     float: left;
     margin-top: 7px;
